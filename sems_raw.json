@@ -1,0 +1,49 @@
+{
+  "language": "en",
+  "function": null,
+  "hasError": false,
+  "msg": "操作成功",
+  "code": "0",
+  "data": {
+    "hasGenset": false,
+    "hasMicroGrid": false,
+    "hasMoreInverter": true,
+    "hasPowerflow": true,
+    "powerflow": {
+      "pv": "1162W",
+      "pvStatus": -1,
+      "bettery": "0W",
+      "betteryStatus": 0,
+      "betteryStatusStr": null,
+      "load": "2915W",
+      "loadStatus": 1,
+      "grid": "1753W",
+      "soc": 0,
+      "socText": "0%",
+      "hasEquipment": true,
+      "gridStatus": -1,
+      "isHomKit": false,
+      "isBpuAndInverterNoBattery": false,
+      "isMoreBettery": true,
+      "genset": "0W",
+      "gensetStatus": 1,
+      "gridGensetStatus": 0,
+      "microGrid": "0W",
+      "microGridStatus": 0
+    },
+    "hasGridLoad": true,
+    "isStored": false,
+    "isParallelInventers": false,
+    "isMixedParallelInventers": false,
+    "isEvCharge": false,
+    "evCharge": null,
+    "is3rdEms": false
+  },
+  "components": {
+    "para": "{\"model\":{\"PowerStationId\":\"58faee60-cc86-4de8-ad3d-575dc3e8c01e\"}}",
+    "langVer": 281,
+    "timeSpan": 4,
+    "api": "http://au.semsportal.com:82/api/v2/PowerStation/GetPowerflow",
+    "msgSocketAdr": null
+  }
+}

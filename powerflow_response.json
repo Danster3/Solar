@@ -1,0 +1,14 @@
+{
+  "hasError": false,
+  "code": 100002,
+  "msg": "The authorization has expired, please log in again.",
+  "data": null,
+  "translationCode": "code_100002",
+  "components": {
+    "para": null,
+    "langVer": 281,
+    "timeSpan": 0,
+    "api": "http://au.semsportal.com:82/api/v2/PowerStation/GetPowerflow",
+    "msgSocketAdr": ""
+  }
+}

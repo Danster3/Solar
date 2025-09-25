@@ -1,0 +1,749 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=1920,user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>GOODWE SEMS PORTAL</title>
+    <link href="/css/common/common.css?v=202509221618" rel="stylesheet"/>
+
+    <link href="/lib/element-ui/lib/theme-chalk/index.css?v=202509221618" rel="stylesheet" />
+    
+    <link href="/css/common/loading.css?v=202509221618" rel="stylesheet" />
+    <link href="/css/common/goodwe.dialog.css?v=202509221618" rel="stylesheet" />
+    <link href="/css/views/login.css?v=202509221618" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="/Images/ico_new/48.ico" />
+    <style>
+        body[server=GE] .ge-remark{
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .gdw-message-box {
+          top: 48%;
+        }
+    </style>
+</head>
+<body lang="en" server="">
+    <!--顶端-->
+    <div id="head">
+        <div class="top-con">
+            <div class="div-logo" onclick="window.open('https://en.goodwe.com')"  style="cursor:pointer">
+                <img src="/Images/banner/logo_red.png?v=202509221618" alt="" />
+                    <img src="/Images/banner/logo_1.png?v=202509221618" alt="">
+                    <div class="line"></div>
+            </div>
+            <ul class="master-nav">
+                <li>
+                    <a class="nav-item" onclick="loginDemo()">Demo</a>
+                </li>
+                <li>
+                    <label class="nav-spliter">|</label>
+                </li>
+                            <li class="operation-guide">
+                    <a class="nav-item" href="https://en.goodwe.com/Ftp/EN/Downloads/User%20Manual/GW_SEMS%20Portal-User%20Manual-EN.pdf" target="_blank">Operation Guide</a>
+                </li>
+                <li class="operation-guide-line">
+                    <label class="nav-spliter">|</label>
+                </li>
+                <!--<li>
+                    <a class="nav-item" href="https://oversea-gops.oss-cn-hongkong.aliyuncs.com/help/What's%20New%20in%20GoodWe%20SEMS%20Portal%20-%20v1.1.pdf" target="_blank"><span>What's new?</span></a>
+                </li>
+                <li>
+                    <label class="nav-spliter">|</label>
+                </li>-->
+                                        <li>
+                    <a class="nav-item" href="https://goodwetechnology.zendesk.com/hc/en-gb" target="_blank"><span>After-Sales</span></a>
+                </li>
+                <li>
+                    <label class="nav-spliter">|</label>
+                </li>
+                            <li>
+                    <a class="nav-item" href="https://community.goodwe.com/Forum">Forum</a>
+                </li>
+                <li>
+                    <label class="nav-spliter">|</label>
+                </li>
+                <li class="lang">
+                    <a href="javascript:;" id="choosedLang">Language-English</a>
+                    <img src="" />
+                    <div class="lang_list">
+                        <div class="arrow"></div>
+                        <ul class="lang_item text-center clear">
+                            
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    
+    <div>
+        
+
+<style>
+    /*弹框的样式,我怕影响别的页面,所以写在html上面,因为login.css有好几个页面在用*/
+    .gdw-message-box button:first-child{
+        background:#b8b9b9;
+    }
+    .gdw-message-box button:last-child{
+        background:#03BBD6;
+    }
+    .div_lay .btn_cancle{
+        background:#03BBD6;
+    }
+    .div_download .log-webinfo {
+        line-height: 20px;
+        text-align: center;
+        display: block;
+        bottom: 8px;
+        position: fixed;
+        top:initial;
+        width:100%;
+        text-align: center;
+        display: none;
+    }
+    @media screen and (max-height: 768px) {
+        .div_download .log-webinfo{
+            position: static;
+            margin-top:5px;
+        }
+    }
+</style>
+<script>
+    var tryCount = localStorage.loginTryCount || 0;
+    var ip="203.118.156.54";
+    var web_page = "login"
+</script>
+<div class="section banner">
+    <div class="n_section">
+        <div class="banner_box" style="position:relative">
+            <!--入口-->
+            <div class="entry form" style="position: absolute; right: 13%;">
+                <form class="clearfix" method="post">
+                    <div class="list user">
+                        <label></label>
+                        <input type="text" name="username" id="username" class="require" required placeholder="Email Address" autocomplete="off" style="width: 250px; padding-left: 16px; left: 50px;" />
+                    </div>
+                    <div class="list passw login_account">
+                        <label></label>
+                        <input type="password" name="password" id="password" class="require" required placeholder="Please enter your password" autocomplete="off" style="width: 250px; padding-left: 16px; left: 50px; border-right: 1px solid #ccc" />
+                        <input type="text" id="password_visibility" placeholder="Please enter your password" class="hide" autocomplete="off" style="width: 205px; padding-left: 16px; left: 50px; ime-mode: disabled" />
+                        <!-- <div class="eye"></div> -->
+                    </div>
+                    <div style="width: 100%; height: 38px;" id="securityCode">
+                        <div class="list" style="float: left" id="codelist">
+                            <input type="text" name="securitycode" id="securitycode" class="require" required placeholder="Verification Code" style="" />
+                        </div>
+                        <div class="list" style="width: 45%; float: right; border: 1px solid #ccc">
+                            <img src="/Home/SecurityCode" style="height: 38px; width: 100%; float: right; cursor: pointer" id="valid_code" onclick="this.src=this.src+'?'" title="Click to refresh the picture." />
+                        </div>
+                    </div>
+
+                    <div class="button">
+                        <input type="button"
+                               class="submit"
+                               id="btnLogin"
+                               value="Log In" />
+                        <input type="button" class="but" value="Register"
+                               onclick="window.location.href='/home/register'" />
+                    </div>
+                    <div id="err_msg" class="err-msg" style="text-align:center;color:#ff0000;height:10px;">
+
+                    </div>
+                    <div class="tips">
+                        <div class="check">
+                            <input type="checkbox" id="chkRemember" checked="checked" />
+                            <label for="chkRemember">Remember</label>
+                        </div>
+                        <a href="/home/ForgetPassword" class="more ca" id="btnForgetPwd"
+                           title="Forgot password?">Forgot password?</a>
+                    </div>
+                        <div class="tips-statement">
+                            <div style="display:flex; align-items:center; width: 317px;">
+                                <input type="checkbox" id="readStatement" />
+                                <label for="readStatement" id="readStr" style="margin-left: 5px">
+                                </label>
+                            </div>
+                        </div>
+                </form>
+            </div>
+            <ul class="animation clearfix">
+                <li>
+                    <img src="https://oversea-gops.oss-cn-hongkong.aliyuncs.com/image/sems%20banner%20web-01-min.jpg" />
+                                            <div class="drainage-image" style="position:absolute; bottom:20px; left:20px; max-width: 635px;">
+                            <img src="https://gops.oss-cn-hongkong.aliyuncs.com/system_logo/sems%2B_banner.png">
+                        </div>
+                                    </li>
+                    <!-- <li style="display:none">
+
+                <a class="entry-btn" href="//community.goodwe.com/Forum/details/2c9180827f3ae3dc017f3e3dfd8800af" target="_blank">
+                <img src="~/Images/banner/banner2.jpg">
+                </a>
+
+            </li> -->
+
+            </ul>
+                <!-- <div class="carousel-indicators">
+            <li class="active"></li>
+            <li></li>
+        </div> -->
+
+
+
+        </div>
+    </div>
+    
+    
+</div>
+    <div style="text-align:center;margin-top:10px;">
+        <a href="https://ezdesigner2.semsportal.com/" target="blank">EzDesigner2</a>
+        <span style="padding: 0 8px;">|</span>
+        <a href="http://www.goodwe.com" target="blank">GOODWE</a>
+    </div>
+<div class="mask"></div>
+
+
+<div class="first_login_vaild">
+
+    
+    <div class="div_lay" id="check_user_name" style="width:380px;height:auto">
+        <div class="gdw-message-box-header">
+            <h2>Note</h2>
+        </div>
+        <div class="gdw-message-box-container ser">
+            <h4>This organization account is a first-time login..<br />Please complete your name to conclude the verification.</h4>
+            <div style="padding-top: 5px;text-align:left;padding-left:80px;">
+                <div style="margin:10px 0">
+                    <span>First Name:</span>
+                    <label id="first_name"></label>
+                </div>
+                <div>
+                    <span>Last Name:</span>
+                    <input type="text" autocomplete="off" style="border: thin solid #dddddd; height: 30px; width: 100px; outline: none; padding: 0px 5px;border-radius:4px" id="last_name">
+                </div>
+                <div style="height:30px;">
+                    <p style="font-size: 13px; color: #ff0000; display: none;line-height:30px;" class="err-msg" id="valid_msg_1"></p>
+                </div>
+            </div>
+            <div class="gdw-message-box-button-group gmbbg-up-line">
+                <button onclick="clearUserInfor()">Cancel</button>
+                <button id="check_user_name_btn" onclick="valid_name_click()">Next</button>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="div_lay" style="height:auto;width:360px" id="update_pwd_owner">
+        <div class="gdw-message-box-header">
+            <h2>Important Note</h2>
+        </div>
+        <div class="gdw-message-box-container">
+            <p style="color: #808080; font-size: 13px;line-height:20px;text-align:left;padding:16px 10px" id="ownerSetPwdCon">Dear user: to meet GDPR requirements, your login password needs to be changed to make it more secure.</p>
+            <div style="padding: 5px 0px 0px 20px;position:relative">
+                <table style="width:100%" >
+                    <tr >
+                        <td style="text-align: right;width:100px;"><span style="color: #ff0000">*</span>Password</td>
+                        <td style="text-align: left; padding-left: 5px">
+                            <input type="password" autocomplete="off" style="border: thin solid #dddddd; height: 30px; outline: none; padding: 0px 5px;border-radius:4px" placeholder="Password" id="new_pwd_owner">
+                            <input type="text" autocomplete="off" style="display:none;border: thin solid #dddddd; height: 30px; outline: none; padding: 0px 5px;border-radius:4px" placeholder="Password" id="new_pwd_owner_visibility">
+                        </td>
+                    </tr>
+                    <tr style="height:15px;line-height:15px;font-size:12px; color:#ff0000">
+                        <td></td>
+                        <td class="pwd_err err-msg" style="width:350px;height:30px"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right"><span style="color: #ff0000">*</span>Confirm</td>
+                        <td style="text-align: left; padding-left: 5px">
+                            <input type="password"autocomplete="off"  style="border: thin solid #dddddd; height: 30px; outline: none; padding: 0px 5px;border-radius:4px" placeholder="Confirm" id="con_pwd_owner">
+                        </td>
+                    </tr>
+                    <tr style="height:15px;line-height:15px;font-size:12px;color:#ff0000">
+                        <td></td>
+                        <td class="text-left err-msg con_pwd_err" style="width:250px;height:30px"></td>
+                    </tr>
+                </table>
+                <div class="update-pwd-eye"></div>
+            </div>
+            <p style="font-size: 12px;line-height:20px;padding:10px;text-align:left" id="valid_msg_2">
+                This should be 8-16 characters, including at least one letter and one number.
+            </p>
+            <div class="gdw-message-box-button-group gmbbg-up-line">
+                <button id="first_update_pwd" onclick="update_pwd_click()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="div_lay" id="free_login">
+        <div class="gdw-message-box-header">
+            <h2>Note</h2>
+        </div>
+        <div class="gdw-message-box-container" style="height:120px;">
+            <h4 style="line-height:50px">Set up successfully.</h4>
+            <p style="text-align:left;padding:0 10px">
+                {{lang.newPwdSuccessTip}}
+            </p>
+        </div>
+        <div class="gdw-message-box-button-group gmbbg-up-line">
+            <button onclick="free_login()">OK</button>
+        </div>
+    </div>
+
+    
+    <div class="div_lay" id="risk_tips" style="height:auto;">
+        <div class="gdw-message-box-header">
+            <h2>Note</h2>
+        </div>
+        <div class="gdw-message-box-container">
+            <p style="width: 100%;text-align:center; font-size:15px; color:#464646;padding-top:10px;line-height: 40px; box-sizing: border-box">Commercial risks,Important note</p>
+            <p style="font-size: 13px;text-align:left;padding: 10px 20px;color:#8C8C8C; line-height:20px;">Your superior will be able to see all your sub-account information. Please consider carefully. If you do not accept it, you can opt to change the organization type to avoid this risk.</p>
+        </div>
+        <div class="gdw-message-box-button-group gmbbg-up-line">
+            <button onclick="update_org_type_lay()">Reject</button>
+            <button onclick="accept_risk()">Accept</button>
+        </div>
+    </div>
+
+    
+    <div class="div_lay" id="update_org_type" style="height:auto">
+        <div class="gdw-message-box-header">
+            <h2>Note</h2>
+        </div>
+        <div class="gdw-message-box-container" style="padding-bottom:20px">
+            <p style="padding:20px;text-align:left;font-size:13px;color:#8A8A8A">Your organization type will change from internal to external.：</p>
+            <p style="font-size:16px;font-weight:bold">Organization type</p>
+            <p style="padding:10px 0">will change from</p>
+            <p style="font-size:14px;color:#8A8A8A"><label style="color:#444444;">Internal to external</label> </p>
+        </div>
+        <div class="gdw-message-box-button-group gmbbg-up-line">
+            <button onclick="back2tips()">Cancel</button>
+            <button onclick="sure_change_org()">Submit</button>
+        </div>
+    </div>
+
+
+    
+    <div class="div_lay" id="create_station_app">
+        <div class="gdw-message-box-header">
+            <h2>Note</h2>
+        </div>
+        <div class="gdw-message-box-container ">
+            <p style="font-size:15px;padding-top:20px;"><label style="color:#555555;font-size:15px;line-height:20px;">Please log in to mobile application to create your PV plant.</label> </p>
+            <p style="padding:10px;line-height: 20px;color: #A3A3A3;text-align:left">There is no PV plant information in your current account. Please create a PV plant on your mobile phone or contact your installer.</p>
+        </div>
+        <div class="gdw-message-box-button-group gmbbg-up-line">
+            <button>OK</button>
+        </div>
+    </div>
+    
+    <div class="div_lay" id="login_by_email">
+        <div class="gdw-message-mask active"></div>
+        <div class="gdw-message-box-container">
+            <div class="gdw-message-box-header">
+                <h2 class="gmbh-selected-tags">Important Notice</h2>
+            </div>
+            <p style="margin-top:30px">Due to a system upgrade, it is not possible to log in using a user name and mobile phone number. You can only log in with your email address. We apologize for any inconvenience caused.</p>
+            <div id="login_by_email_address" style="margin:15px 0"></div>
+            <div class="gdw-message-box-button-group gmbbg-up-line">
+                <button onclick="add_email_notice()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="div_lay" id="add_email" style="height:auto">
+        <div class="gdw-message-mask active"></div>
+        <div class="gdw-message-box-container">
+            <div class="gdw-message-box-header">
+                <h2 class="gmbh-selected-tags">Add Email</h2>
+            </div>
+            <div class="email-con">
+                <div class="email-input clear">
+                    <div class="input-title">
+                        <span class="star">*</span>
+                        <span>Email</span>
+                    </div>
+                    <input type="text" autocomplete="off" id="email_input" placeholder="Email Address" style="width:200px" />
+                </div>
+                <div class="email-input clear">
+                    <div class="input-title">
+                        <span class="star">*</span>
+                        <span>Code</span>
+                    </div>
+                    <div style=" height: 30px; display: inline-block">
+                        <input type="text" autocomplete="off" id="email_securitycode" placeholder="Verification Code" style="width:130px" />
+                        <div class="" id="email_check_img" style="width: 70px; float: right; ">
+                            <img src="/Home/SecurityCode" style="height: 30px; width: 100%; cursor: pointer" id="email_valid" onclick="this.src=this.src+'?'" title="Click to refresh the picture." />
+                        </div>
+                    </div>
+                </div>
+                <div id="add_emial_err" class="err-msg" style="height:30px;color:#ff0000"></div>
+                <div class="gdw-message-box-button-group gmbbg-up-line" style="margin:0">
+                    <button onclick="clearUserInfor()">Cancel</button>
+                    <button id="email_next">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="div_lay" id="add_email_note" style="width:400px;height:auto">
+        <div class="gdw-message-mask active"></div>
+        <div class="gdw-message-box-container">
+            <div class="gdw-message-box-header">
+                <h2 class="gmbh-selected-tags">Important Note</h2>
+            </div>
+            <div class="text-center email-show">
+                <p>You are about to register with:</p>
+                <input type="text" class="email_address text-center" readonly="readonly" />
+            </div>
+            <div class="note-detail">
+                <p class="text-center">Please confirm the accuracy as::</p>
+                <div class="note-con text-left">
+                    <p>1.To prevent misregistration, we will send an email to the email address, via which the account can be registered..</p>
+                    <p>2.The email address will also be used to reset password..</p>
+                </div>
+            </div>
+            <div class="gdw-message-box-button-group" style="margin:0">
+                <button id="add_email_cancel">Cancel</button>
+                <button id="add_email_submit">Next</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="div_lay" id="add_email_success" style="height:auto">
+        <div class="gdw-message-mask active"></div>
+        <div class="gdw-message-box-container">
+            <div class="gdw-message-box-header">
+                <h2 class="gmbh-selected-tags">Note</h2>
+            </div>
+            <div class="add-success text-center">
+                <h2>Successfully added</h2>
+                <div>
+                    You can <a href="/home/login" style="color:#03BBD6">Log In</a>with the email address now
+                </div>
+            </div>
+            <div class="gdw-message-box-button-group gmbbg-up-line" style="height:40px;">
+                <button id="add_success_btn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="div_lay" id="cancellation" style="height:auto">
+        <div class="gdw-message-mask active"></div>
+        <div class="gdw-message-box-container">
+            <div class="gdw-message-box-header">
+                <h2 class="gmbh-selected-tags">Note</h2>
+            </div>
+            <div class="add-success text-center">
+                <h4></h4>
+                <div></div>
+                <p></p>
+            </div>
+            <div class="gdw-message-box-button-group gmbbg-up-line" style="height:40px;">
+                <button onclick="layer_close()">OK</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="div_lay" id="sure_old_account" style="height:auto">
+        <div class="gdw-message-mask active"></div>
+        <div class="gdw-message-box-container">
+            <div class="gdw-message-box-header">
+                <h2 class="gmbh-selected-tags">Note</h2>
+            </div>
+            <div class="sure-old-account-con text-center">
+                If you already have an account for the old GoodWe portal, you can log in with it.
+            </div>
+            <div class="gdw-message-box-button-group gmbbg-up-line" style="height:40px;">
+                <button class="btn_cancle" onclick="layer_close()">OK</button>
+                <button class="btn_primary" style="background:#b8b9b9" onclick="window.location.href='/home/register'">Register</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    <div class="section foot" id="other_foot" style="display:none">
+        <div class="n_section">
+            <div class="div_download">
+                <p class="foot-tip">Scan QR code to download APP: SEMS Portal</p>
+                <div class="download_img">
+                    <div class="download_img_container">
+                            <img src="/Images/temp/login_app_download.png" />
+                    </div>
+                    <div style="clear: both"></div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="section foot" id="login_foot">
+        <div class="n_section">
+            <div class="div_download">
+                <p class="foot-tip">Scan QR code to download APP: SEMS Portal</p>
+                <div class="download_img">
+                    <div class="download_img_container">
+                            <img src="/Images/temp/global-SolarGo.png" />
+                    </div>
+                </div>
+
+                <div class="download_img_second" style="display: none">
+                    <div class="download_img_container">
+                            <img src="/Images/temp/global_semsplus.png" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="cookies-statement">
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width:190px;text-align: center">
+                    <h3>USE OF COOKIES</h3>
+                </td>
+                <td>
+                    <div>
+                        <span>1.</span>
+                        <p>
+                            Cookies are text files that are stored on the computer of the visitor to the website, allowing the
+                            visitor to be recognized on an anonymous basis. Cookies in general can be blocked or deleted by adjusting
+                            your browser settings.
+                        </p>
+                    </div>
+                    <div>
+                        <span>2.</span>
+                        <p>
+                            By using this website, you consent to the use of our websites being analyzed in the manner described
+                            above.
+                        </p>
+                    </div>
+                </td>
+                <td style="width:200px;text-align: center">
+                    <a class="close-statement" href="javascript:void(0);" onclick="return acceptCookieHandle();">Accept & Close</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+     
+    <div class="cookies-statement-new" style="display: none;">
+      <div class="cookie-main">
+           <h3>USE OF COOKIES</h3>
+           <div class="cookie-describe"></div>
+           <div class="cookie-btns">
+                <input type="button" class="setting_btn" value="Cookie Settings" 
+                       onclick="openCookieSetting()" />
+                <input type="button" class="reject_btn" value="Reject All" 
+                       onclick="handleCookie(false)" />
+                <input type="button" class="accept_btn" value="Accept All" 
+                       onclick="handleCookie(true)" />
+           </div>
+        </div>
+    </div>
+    
+    <div id="vm-cookie">
+     <gdw-dialog :show="showCookieSetting" :width="1098" :title="lang.CookieSet_title" arrow v-cloak>
+        <img src="/Images/icon-new/dialog_close.png" class="close-img" @click="closeCookieSetting()" />
+        <div class="cookie-con-main">
+            <div class="customize-title"> {{lang.CookieSet_CustConPre}} </div>
+            <div class="customize-tip">{{lang.CookieSet_CustConPre_Description1}} <br />
+                 {{lang.CookieSet_CustConPre_Description2}}
+            </div>
+            <el-collapse v-model="activeNames" @change="handleChange">
+                <el-collapse-item name="1">
+                <template slot="title">
+                   <div class="cookie-item-title">
+                      {{lang.CookieSet_Necessary}}
+                      <div class="cookie-title-rigth">
+                         {{lang.CookieSet_Always}}
+                      </div>
+                   </div>
+                </template>
+                <div class="cookie-item-con">
+                     {{lang.CookieSet_Necessary_Description}} <br/>
+                        <br/> {{lang.CookieSet_Cookie}} ASP.NET_SessionId
+                        <br/>{{lang.CookieSet_Duration}} session
+                        <br/>{{lang.CookieSet_Description}} {{lang.CookieSet_Necessary_Description1}}
+                        <br/>{{lang.CookieSet_Cookie}} acceptcookie
+                        <br/>{{lang.CookieSet_Duration}} session
+                        <br/>{{lang.CookieSet_Description}} {{lang.CookieSet_Necessary_Description2}}
+                </div>
+                </el-collapse-item>
+                <el-collapse-item name="2">
+                   <template slot="title">
+                     <div class="cookie-item-title">
+                      {{lang.CookieSet_Functional}}
+                      <div class="cookie-title-rigth">
+                        <el-switch v-model="funcional_switch" active-color="#4CD964" inactive-color="#e6ebf5"></el-switch>
+                      </div>
+                     </div>
+                   </template>
+                   <div class="cookie-item-con">
+                      {{lang.CookieSet_Functional_Description}} <br/>
+                        <br/>{{lang.CookieSet_Cookie}} locationNoticeInterval
+                        <br/>{{lang.CookieSet_Duration}} session
+                        <br/>{{lang.CookieSet_Description}} {{lang.CookieSet_Functional_Description1}}
+                        <br/>{{lang.CookieSet_Cookie}} _ecvk
+                        <br/>{{lang.CookieSet_Duration}} session
+                        <br/>{{lang.CookieSet_Description}} {{lang.CookieSet_Functional_Description2}}
+                         <br/>{{lang.CookieSet_Cookie}} iKnow
+                        <br/>{{lang.CookieSet_Duration}} session
+                        <br/>{{lang.CookieSet_Description}} {{lang.CookieSet_Functional_Description3}}
+                    </div>
+                </el-collapse-item>
+            </el-collapse>
+            <div class="btn-group">
+                <input type="button" class="saveMy_btn" :value="lang.CookieSet_Save" @click="saveCookieSetting()" />
+                <input type="button" class="reject_btn" :value="lang.CookieSet_Reject" @click="handleCookie(false)" />
+                <input type="button" class="accept_btn" :value="lang.CookieSet_Accept" @click="handleCookie(true)" />
+            </div>
+        </div>
+        <gdw-dialog-button-group slot="button" style="display:none">
+            <goodwe-button></goodwe-button>
+        </gdw-dialog-button-group>
+     </gdw-dialog>
+    </div>
+    
+    <script src="/js/language/zh_cn.js?v=202509221618"></script>
+    <script src="https://sems-lng-au.oss-cn-hongkong.aliyuncs.com/langfile_bylang/SemsPortal.web.en.286.js"></script>
+    <script src="https://static.semsportal.com/static/bundles/common/vendor.js"></script>
+    <script src="/lib/element-ui/lib/index.js"></script>
+
+    <script src="https://static.semsportal.com/static/bundles/common/common.js?v=202509221618"></script>
+    <script>
+        var neutral=false;
+        var odm = ""
+        var gops_api_domain = "https://au.semsportal.com/api/";
+        var demoAccount = "demo@goodwe.com";
+        var demoPassword = "GoodweSems123!@#";
+        var langVer = +"286";
+        var activeLanguage = "en";
+
+        $(".server-detail .gdw-message-box-button-group button").on("click", function () {
+            var index = $(this).index();
+            if (index == 0) {
+                $(".server-detail .gdw-message-mask").fadeOut()
+                $(".server-detail .gdw-message-box").fadeOut().removeClass("active");
+            } else {
+                var radio = $(".server-detail .server-item.radio.radio-selected");
+                var url = radio.attr("data-url");
+                window.location.href = url;
+            }
+        });
+        if(window.location.href.toLowerCase().indexOf("home/login") > -1){
+            $(".banner .n_section").append($("#login_foot .download_img"))
+            $(".banner .n_section .download_img").removeClass("download_img").addClass("login-download-img")
+            if(odm=="GE"){
+                $(".login-download-img").append('<p style="color:#FFF;text-align:center;">Power Sight</p>')
+            }else if(odm=="LG"){
+                $(".login-download-img").append('<p style="color:#FFF;text-align:center;">LGES eMonitoring</p>')
+            }
+            else if(!neutral){
+                $(".login-download-img").append('<p style="color:#FFF;text-align:center;">SolarGo</p>')
+                // $(".banner .n_section").append($("#login_foot .download_img_second"))
+                // $(".banner .n_section .download_img_second").removeClass("download_img_second").addClass("login-download-img-second")
+                // $(".login-download-img-second").append('<p style="color:#FFF;text-align:center;">SolarGo</p>')
+            }else{
+                $(".login-download-img").append('<p style="color:#000;text-align:center;">SolarPortal</p>')
+            }
+        }
+        var cookieStatementElement = $(".cookies-statement table");  // cookie使用条例旧版
+        // var cookieStatementNew = $(".cookies-statement-new");        // cookie使用条例新版
+        if ((getCookie("acceptcookie") == "false" || !getCookie("acceptcookie")) && odm) { // 旧cookie
+            cookieStatementElement.show();
+        }
+        // if (window.location.href.toLowerCase().indexOf('home/login') > -1   // 新cookie
+        //     && !getCookie("acceptcookie") && !odm) 
+        // {
+        //     cookieStatementNew.show();
+        //     const cookieDesStr = Goodwe.Ops.Resouces.Front.Cookie_useCookieDescription;
+        //     const finalStr = cookieDesStr.replace('[DATA]CookieSet_Accept[/DATA]',
+        //                       `<a class="ahref-cookie" onclick="handleCookie(true)">${Goodwe.Ops.Resouces.Front.CookieSet_Accept}</a>`)
+        //                     .replace('[DATA]CookieSet_title[/DATA]',
+        //                       `<a class="ahref-cookie" onclick="openCookieSetting()">${Goodwe.Ops.Resouces.Front.CookieSet_title}</a>`)
+        //                     .replace('[DATA]CookieSet_PrivacyPolicy[/DATA]',
+        //                       `<a class="ahref-cookie" href="/Home/GoodweReadLiteratureView?id=Privacy_policy&page=login">
+        //                         ${Goodwe.Ops.Resouces.Front.CookieSet_PrivacyPolicy}
+        //                     </a>`)
+        //    $(".cookie-describe").html(finalStr);
+        // }
+      
+        /** 打开新版cookie设置弹出框 */
+        // function openCookieSetting() {
+        //   cookieStatementNew.hide();
+        //   vmCookie.showCookieSetting = true;
+        //   vmCookie.funcional_switch = getCookie("Funcional_switch") === 'true';
+        // }
+        // 关闭新版cookie设置弹出框
+        // function closeCookieSetting() {
+        //    vmCookie.showCookieSetting = false;
+        //    if (window.location.href.toLowerCase().indexOf('home/login') > -1 
+        //        && !getCookie("acceptcookie")){
+        //       cookieStatementNew.show();
+        //    }
+        // }
+        function acceptCookieHandle() {
+            setCookie("acceptcookie", "true", 365);
+            if (getCookie("acceptcookie")) {
+                cookieStatementElement.hide();
+            }
+            return false;
+        }
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return unescape(arr[2]);
+            else
+                return null;
+        }
+        function handleCookie(flag) {
+          setCookie("acceptcookie", flag, 365);
+          cookieStatementElement.hide();
+        //   cookieStatementNew.hide();
+          vmCookie.showCookieSetting = false;
+        }
+        var vmCookie = new Vue({
+            el: '#vm-cookie',
+            data() {
+              return {
+                lang: Goodwe.Ops.Resouces.Front,
+                showCookieSetting: false,
+                activeNames: ['1','2'],
+                funcional_switch: false,
+              }
+            },
+            methods: {
+                handleChange(val) { },
+            }
+        })
+        /** Save my Preferences 点击 */
+        function saveCookieSetting() {
+            setCookie("Funcional_switch", vmCookie.funcional_switch, 365);
+            notify(Goodwe.Ops.Resouces.Front.save_success, true);
+        }
+        /** 提示文字 */
+        function notify(msg, isSuccess) {
+          $.pushCheckTip(msg, isSuccess ? 'success' : 'error');
+          setTimeout(() => {
+             $.popCheckTip();
+          }, 1500);
+        }
+    </script>
+    
+    <script src="/js/common/messagebox.js?v=202509221618"></script>
+    <script src="/lib/spin.js?v=202509221618"></script>
+    <script src="/js/common/loading.js?v=202509221618"></script>
+    <script src="/js/view/login.js?v=202509221618"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+{
+  "status": 200,
+  "headers": {
+    "connection": "keep-alive",
+    "set-cookie": "ASP.NET_SessionId=inmbdqnxle4idkhgkzcmaztk; path=/; HttpOnly; SameSite=Lax,Path=/; HttpOnly; Secure",
+    "cache-control": "private",
+    "date": "Thu, 25 Sep 2025 00:04:36 GMT",
+    "access-control-allow-origin": "*",
+    "x-aspnetmvc-version": "5.2",
+    "content-type": "application/json; charset=utf-8",
+    "server": "nginx",
+    "x-powered-by": "ASP.NET",
+    "access-control-allow-headers": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE",
+    "content-length": "241",
+    "x-aspnet-version": "4.0.30319"
+  },
+  "body_snippet": "{\"code\":0,\"msg\":\"\",\"data\":{\"redirect\":\"/PowerStation/powerstatus\",\"token\":{\"uid\":\"b31debb9-5224-4781-ab62-f0465ea83020\",\"timestamp\":1758758657875,\"token\":\"d1a0036b927f6b9e4b31d6737eef827d\",\"client\":\"web\",\"version\":\"v1.0.0\",\"language\":\"en\"}}}"
+}
