@@ -62,6 +62,14 @@ class SemsClient {
     }
   }
 
+  Future<void> _deletePersistedToken() async {
+    if (_secureStorage != null) {
+      await _secureStorage.delete(key: 'sems_token');
+    } else {
+      await _fileStore.delete();
+    }
+  }
+
   /// Public helper for the Flutter app to pre-load any persisted token at startup.
   Future<void> loadPersistedTokenForApp() async {
     await _loadPersistedToken();
@@ -382,6 +390,8 @@ class SemsClient {
     if (resp.statusCode != 200) throw Exception('Powerflow request failed: ${resp.statusCode}');
     var j = json.decode(resp.body);
     if (j is Map<String, dynamic> && j['code'] == 100002) {
+      // Token expired on server. Remove persisted token and force a fresh login.
+      await _deletePersistedToken();
       await _clearLoginCache();
       await _ensureLogin();
       // update headers with refreshed values
@@ -396,7 +406,7 @@ class SemsClient {
   }
 
   /// Fetch today's plant power chart (generation/load series and totals)
-  Future<Map<String, dynamic>> fetchPlantPowerChart(String powerStationId, String date) async {
+  Future<Map<String, dynamic>> fetchPlantPowerChart(String powerStationId, String date, {bool debug = false}) async {
     // Use cached login when possible
     await _ensureLogin();
     final url = Uri.parse('https://au.semsportal.com/api/v2/Charts/GetPlantPowerChart');
@@ -416,6 +426,8 @@ class SemsClient {
     if (resp.statusCode != 200) throw Exception('PlantPowerChart request failed: ${resp.statusCode}');
     var j = json.decode(resp.body) as Map<String, dynamic>;
     if (j['code'] == 100002) {
+      // Token expired on server. Delete persisted token and force fresh login.
+      await _deletePersistedToken();
       await _clearLoginCache();
       await _ensureLogin();
       if (_cachedTokenHeader != null) headers['token'] = _cachedTokenHeader!;
@@ -423,6 +435,16 @@ class SemsClient {
       resp = await _http.post(url, headers: headers, body: body);
       if (resp.statusCode != 200) throw Exception('PlantPowerChart request failed: ${resp.statusCode}');
       j = json.decode(resp.body) as Map<String, dynamic>;
+    }
+
+    if (debug) {
+      try {
+        final txt = json.encode(j);
+        final truncated = txt.length > 2000 ? txt.substring(0, 2000) + '...<<truncated>>' : txt;
+        print('[SEMS debug] PlantPowerChart raw: $truncated');
+      } catch (e) {
+        print('[SEMS debug] Failed to print raw: $e');
+      }
     }
 
     // parse today's generation from generateData

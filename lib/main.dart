@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   double _currentPower = 0.0;
   double _consumption = 0.0;
   double _todayKwh = 0.0;
+  String _debugText = '';
   late final SemsClient _semsClient;
 
   // removed sample counter; app shows SEMS data instead
@@ -74,12 +75,29 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       final today = DateTime.now();
       final date = '${today.year.toString().padLeft(4,'0')}-${today.month.toString().padLeft(2,'0')}-${today.day.toString().padLeft(2,'0')}';
-      final data = await client.fetchPlantPowerChart('58faee60-cc86-4de8-ad3d-575dc3e8c01e', date);
+  final data = await client.fetchPlantPowerChart('58faee60-cc86-4de8-ad3d-575dc3e8c01e', date, debug: true);
       setState(() {
-        _currentPower = (data['current_pv_w'] as double?) ?? 0.0;
-        _consumption = (data['current_load_w'] as double?) ?? 0.0;
-        _todayKwh = (data['today_kwh'] as double?) ?? 0.0;
-        _status = 'ok';
+        // data entries may be int or double (num), so coerce safely to double
+        _currentPower = (data['current_pv_w'] as num?)?.toDouble() ?? 0.0;
+        _consumption = (data['current_load_w'] as num?)?.toDouble() ?? 0.0;
+        _todayKwh = (data['today_kwh'] as num?)?.toDouble() ?? 0.0;
+        // attach a tiny debug hint to status containing the raw generateData if present
+        final raw = data['raw'];
+        String hint = 'ok';
+        try {
+          if (raw is Map && raw['data'] is Map && raw['data']['generateData'] != null) {
+            hint = 'ok (generateData present)';
+          }
+        } catch (_) {}
+        _status = hint;
+        // show a small truncated raw JSON in the debug panel so logs are not required
+        try {
+          final raw = data['raw'];
+          final txt = raw != null ? raw.toString() : ''; // prefer JSON encoder but keep short
+          _debugText = txt.length > 2000 ? txt.substring(0, 2000) + '...<<truncated>>' : txt;
+        } catch (_) {
+          _debugText = '';
+        }
       });
     } catch (e) {
       setState(() {
@@ -152,6 +170,15 @@ class _MyHomePageState extends State<MyHomePage> {
             Text('Today total (kWh): ${_todayKwh.toStringAsFixed(3)}'),
             const SizedBox(height: 12),
             ElevatedButton(onPressed: _fetchSems, child: const Text('Fetch SEMS')),
+            const SizedBox(height: 12),
+            const Text('Debug (raw response snippet):'),
+            SizedBox(
+              height: 180,
+              width: 600,
+              child: SingleChildScrollView(
+                child: Text(_debugText),
+              ),
+            ),
           ],
         ),
       ),

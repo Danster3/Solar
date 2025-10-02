@@ -1,0 +1,14 @@
+{
+  // VS Code launch config to run Flutter on a specific Android device
+  // Replace the deviceId value if your device id changes (use `flutter devices` to list)
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flutter: Run on Android RFCTB0AKL9D",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "args": ["-d", "RFCTB0AKL9D"]
+    }
+  ]
+}

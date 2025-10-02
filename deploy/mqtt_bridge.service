@@ -1,0 +1,15 @@
+[Unit]
+Description=SEMS MQTT Bridge
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/Solar/solar_app
+EnvironmentFile=/etc/default/mqtt_bridge
+ExecStart=/usr/bin/dart run bin/mqtt_bridge.dart
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
