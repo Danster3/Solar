@@ -1,0 +1,10 @@
+name: sems_cli
+description: A small Dart CLI to run SEMS mqtt bridge without Flutter.
+version: 0.0.1
+environment:
+  sdk: '>=3.7.0 <4.0.0'
+
+dependencies:
+  http: ^0.13.5
+  html: ^0.15.0
+  mqtt_client: ^9.0.2
